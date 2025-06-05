@@ -1,0 +1,8 @@
+module bit_full_adder_behav(
+  input a , b , c ,
+  output reg sum , cout 
+);
+  always @(*) begin 
+    {sum, cout} = a + b + c ;  
+  end
+  endmodule
