@@ -1,0 +1,32 @@
+// Code your design here
+  module full_adder(
+    input a , b , c ,
+    output reg sum , cout 
+  );
+    always @(*) begin 
+      {cout, sum} = a + b + c ;  
+    end
+    endmodule
+
+  module bit8_adder (
+      input [7:0] a , b ,
+      input Cin ,
+      output [7:0] sum ,
+      output cout
+
+
+    );
+
+    wire [6:0] c;
+
+    full_adder f0(a[0],b[0],Cin,  sum[0],c[0]);
+    full_adder f1(a[1] ,b[1],c[0], sum[1],c[1]);
+    full_adder f2(a[2],b[2],c[1],  sum[2],c[2]);
+    full_adder f3(a[3],b[3],c[2],  sum[3],c[3]);
+    full_adder f4(a[4],b[4],c[3],  sum[4],c[4]);
+    full_adder f5(a[5],b[5],c[4],  sum[5],c[5]);
+    full_adder f6(a[6],b[6],c[5],  sum[6],c[6]);
+    full_adder f7(a[7],b[7],c[6],  sum[7],cout);
+
+
+  endmodule
