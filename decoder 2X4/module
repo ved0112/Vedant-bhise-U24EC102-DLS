@@ -1,0 +1,12 @@
+module decoder (
+  input a , b ,
+  output [3:0] f 
+);
+  
+  assign f[0] = (~a) & (~b) ;
+  assign f[1] = (~a) & b ; 
+  assign f[2] = a & (~b) ;
+  assign f[3] = a & b ;
+  
+endmodule
+
