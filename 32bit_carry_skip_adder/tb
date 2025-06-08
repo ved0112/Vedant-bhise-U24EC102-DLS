@@ -1,0 +1,44 @@
+// Code your testbench here
+// or browse Examples
+module tb;
+  reg [31:0] a , b ;
+  reg cin ;
+  wire [31:0] sum ;
+  wire cout ;
+  
+  cba_32bit UUT (
+    .a(a) ,
+    .b(b) ,
+    .cin(cin) ,
+    .sum(sum) ,
+    .cout(cout) 
+  );
+  
+  
+  initial begin
+    $dumpfile("wave.vcd");
+    $dumpvars(0, tb);
+
+
+    a = 32'd5; b = 32'd10; cin = 0;
+    #10 $display("a = %d, b = %d, cin = %b => sum = %d, cout = %b", a, b, cin, sum, cout);
+
+    a = 32'hFFFFFFFF; b = 32'd1; cin = 0;
+    #10 $display("a = %h, b = %h, cin = %b => sum = %h, cout = %b", a, b, cin, sum, cout);
+
+    a = 32'hA5A5A5A5; b = 32'h5A5A5A5A; cin = 1;
+    #10 $display("a = %h, b = %h, cin = %b => sum = %h, cout = %b", a, b, cin, sum, cout);
+
+    a = 0; b = 0; cin = 0;
+    #10 $display("a = %d, b = %d, cin = %b => sum = %d, cout = %b", a, b, cin, sum, cout);
+
+    a = 32'hFFFFFFFF; b = 32'hFFFFFFFF; cin = 1;
+    #10 $display("a = %h, b = %h, cin = %b => sum = %h, cout = %b", a, b, cin, sum, cout);
+
+
+    $finish;
+  end
+
+endmodule
+  
+  
