@@ -1,0 +1,31 @@
+module tb ;
+  reg a , b ;
+  wire [3:0]f ;
+  
+  
+  decoder UUT (
+    .a(a) ,
+    .b(b) ,
+    .f(f) 
+  );
+  
+  initial begin
+    $dumpfile("wave.vcd");
+    $dumpvars(0, tb);
+    
+    $display ("a b | f");
+    $monitor ("%b %b | %b");
+              
+	a = 0; b = 0; #10;
+    a = 0; b = 1; #10;
+    a = 1; b = 0; #10;
+    a = 1; b = 1; #10;
+              
+              
+	$finish;
+              
+end
+endmodule
+              
+  
+  
