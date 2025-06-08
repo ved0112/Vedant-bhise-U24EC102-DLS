@@ -1,0 +1,52 @@
+// Code your design here
+module full_adder(
+  input a , b, cin ,
+  output sum , cout 
+);
+  assign {cout,sum} = a + b + cin ;
+  
+endmodule
+
+
+module bit4_adder(
+  input [3:0] a ,b ,
+  input cin ,
+  output [3:0] sum,
+  output cout
+);
+  
+  wire [2:0] c;
+  
+  full_adder f0( a[0] , b[0] ,cin , sum[0] , c[0]);
+  full_adder f1( a[1] , b[1] ,c[0] , sum[1] , c[1]);
+  full_adder f2( a[2] , b[2] ,c[1] , sum[2] , c[2]);
+  full_adder f3( a[3] , b[3] ,c[2] , sum[3] , cout);
+  
+endmodule
+
+module csa_32bit (
+  input [31:0] a, b,
+  input cin,
+  output [31:0] sum,
+  output cout
+);
+  wire [6:0] c;
+
+  genvar i;
+  generate
+    for (i = 0; i < 8; i = i + 1) begin : block
+      wire [3:0] sum0, sum1;
+      wire c0, c1;
+      wire sel = (i == 0) ? cin : c[i-1];
+
+      bit4_adder rca0(a[4*i +: 4], b[4*i +: 4], 1'b0, sum0, c0);
+      bit4_adder rca1(a[4*i +: 4], b[4*i +: 4], 1'b1, sum1, c1);
+
+      assign sum[4*i +: 4] = sel ? sum1 : sum0;
+      if (i < 7)
+        assign c[i] = sel ? c1 : c0;
+      else
+        assign cout = sel ? c1 : c0;
+    end
+  endgenerate
+endmodule
