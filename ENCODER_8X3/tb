@@ -1,0 +1,30 @@
+// Code your testbench here
+// or browse Examples
+module tb ;
+  reg [7:0]in ;
+  wire [2:0]out ;
+  
+  encoder_8X3 UUT (
+    .in(in) ,
+    .out(out) 
+  );
+  
+  initial begin
+    $dumpfile("wave.vcd") ;
+  $dumpvars(0,tb) ;
+  
+  $display("in  | out");
+  $monitor("%b | %b", in, out);
+    
+    for (int i = 0 ; i < 8 ; i = i + 1) begin
+      in = 8'b00000001 << i ;
+      #10 ;
+    end
+   	
+    in = 8'b00000101 ; #10;
+    in = 8'b00100001 ; #10;
+    	
+    $finish;
+  end
+endmodule
+  
