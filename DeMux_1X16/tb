@@ -1,0 +1,30 @@
+// Code your testbench here
+// or browse Examples
+module tb;
+  reg data;
+  reg [3:0] sel;
+  wire [15:0]out ;
+  
+  demux_1x16 UUT(
+    .data(data) ,
+    .sel(sel),
+    .out(out)
+  );
+  
+  initial begin
+    
+    $dumpfile("wave.vcd") ;
+    $dumpvars(0,tb);
+    
+    
+   data = 1'b1 ;
+    
+    for (integer i = 0 ; i < 16 ; i = i + 1 ) begin
+      sel = i ;
+      #20 ;
+    end
+    
+    $finish;
+  end
+  
+endmodule
