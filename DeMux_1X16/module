@@ -1,0 +1,15 @@
+// Code your design here
+module demux_1x16 (
+  input data,
+  input [3:0] sel,
+  output [15:0] out
+ 
+);
+  
+  assign out = (1 << sel) * data ;
+  
+ 
+endmodule
+    
+    
+    
