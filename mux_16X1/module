@@ -1,0 +1,20 @@
+// Code your design here
+module mux_16X1 (
+  input [15:0] in,
+  input [3:0] sel,
+  output out
+);
+  
+  assign out = mux_func(in,sel) ;
+  
+  function automatic mux_func;
+    input [15:0] in;
+    input [3:0] s;
+    begin
+      mux_func = in[s] ;
+    end
+    endfunction
+endmodule
+    
+    
+    
