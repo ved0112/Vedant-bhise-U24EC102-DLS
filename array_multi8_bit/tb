@@ -1,0 +1,29 @@
+// Code your testbench here
+// or browse Examples
+// Code your testbench here
+// or browse Examples
+module tb;
+  reg [7:0] a ,b ;
+  wire [15:0] p ;
+  
+  array_multi8 DUT(
+    .a(a),
+    .b(b),
+    .p(p)
+  
+  );
+  
+  initial begin
+    $display("a    |    b   |   pro");
+    $monitor("%b   |%b      |   %b",a,b,p);
+    
+    a = 8'b0000_0000; b = 8'b0000_0011; #10;
+    a = 8'b0001_0110; b = 8'b0010_1100; #10;
+    a = 8'b0011_0101; b = 8'b0101_0100; #10;
+    a = 8'b1111_0101; b = 8'b0001_0011; #10;
+    a = 8'b1001_0010; b = 8'b1001_1000; #10;
+    
+    $finish;
+    
+  end
+endmodule
