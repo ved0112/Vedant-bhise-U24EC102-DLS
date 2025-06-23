@@ -1,0 +1,76 @@
+module full_adder(
+input a, b, cin,
+output sum, cout
+);
+  assign {cout, sum} = a + b + cin;
+endmodule
+
+
+module array_multi8 (
+  input [15:0] a, b,
+  output [31:0] p
+);
+
+  wire [15:0] pp[15:0];
+  wire [30:0] sum[15:0];
+  wire [30:0] carry[15:0];
+
+genvar i,j;
+
+generate
+  for(i=0;i<16;i=i+1) begin
+    for(j=0;j<16;j=j+1) begin
+      assign pp[i][j]=a[i]&b[j];
+    end
+  end
+endgenerate
+
+assign p[0]=pp[0][0];
+
+generate
+  for(j=1;j<16;j=j+1) begin
+    assign sum[0][j] = pp[0][j];
+  end
+endgenerate
+
+generate
+  for(i=0;i<15;i=i+1) begin
+    for(j=0;j<16;j=j+1) begin
+      if(j==0) begin
+        full_adder f0(
+          .a(pp[i+1][j]),
+          .b(sum[i][j+1]),
+          .cin(1'b0),
+          .sum(p[i+j+1]),
+          .cout(carry[i][j])
+        );
+      end
+      else if(j<15) begin
+        full_adder f1(
+          .a(pp[i+1][j]),
+          .b(sum[i][j+1]),
+          .cin(carry[i][j-1]),
+          .sum(sum[i+1][j]),
+          .cout(carry[i][j])
+        );
+      end
+      else begin
+        full_adder f2(
+          .a(pp[i+1][j]),
+          .b(1'b0),
+          .cin(carry[i][j-1]),
+          .sum(sum[i+1][j]),
+          .cout(carry[i][j])
+        );
+      end
+    end
+  end
+endgenerate
+
+generate
+  for(j = 1; j < 16; j = j + 1)
+    assign p[j + 15] = sum[14][j];
+  assign p[31] = carry[14][15];
+endgenerate
+
+endmodule
