@@ -1,0 +1,72 @@
+module full_adder(
+  input  a, b, cin,
+  output sum, cout
+);
+  assign {cout, sum} = a + b + cin;
+endmodule
+
+module array_multi4 (
+  input  [3:0] a, b,
+  output [7:0] p
+);
+
+  wire [3:0] pp[3:0];         
+  wire [3:0] sum[3:0];        
+  wire [3:0] carry[3:0];     
+
+  genvar i, j;
+
+  generate
+    for (i = 0; i < 4; i = i + 1) begin : row
+      for (j = 0; j < 4; j = j + 1) begin : col
+        assign pp[i][j] = a[i] & b[j];
+      end
+    end
+  endgenerate
+
+  assign p[0] = pp[0][0];
+
+  generate
+    for (j = 1; j < 4; j = j + 1) begin : init
+      assign sum[0][j] = pp[0][j];
+    end
+  endgenerate
+
+  generate
+    for (i = 0; i < 3; i = i + 1) begin : a_row
+      for (j = 0; j < 4; j = j + 1) begin : a_col
+        if (j == 0) begin
+          full_adder fa0 (
+            .a(pp[i+1][j]),
+            .b(sum[i][j+1]),
+            .cin(1'b0),
+            .sum(p[i+j+1]),
+            .cout(carry[i][j])
+          );
+        end else if (j < 3) begin
+          full_adder fa1 (
+            .a(pp[i+1][j]),
+            .b(sum[i][j+1]),
+            .cin(carry[i][j-1]),
+            .sum(sum[i+1][j]),
+            .cout(carry[i][j])
+          );
+        end else begin 
+          full_adder fa2 (
+            .a(pp[i+1][j]),
+            .b(1'b0),
+            .cin(carry[i][j-1]),
+            .sum(sum[i+1][j]),
+            .cout(carry[i][j])
+          );
+        end
+      end
+    end
+  endgenerate
+
+  assign p[4] = sum[2][1];
+  assign p[5] = sum[2][2];
+  assign p[6] = sum[2][3];
+  assign p[7] = carry[2][3];
+
+endmodule
