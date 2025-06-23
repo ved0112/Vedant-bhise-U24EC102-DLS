@@ -1,0 +1,33 @@
+// Code your testbench here
+// or browse Examples
+module tb;
+  reg clk , reset ;
+  wire [3:0] count;
+  
+  ring_counter UUT (
+    .clk(clk),
+    .reset(reset),
+    .count(count)
+  );
+
+  initial begin
+    clk = 1 ;
+    forever #5 clk = ~clk ;
+  end
+  
+  initial begin
+    $dumpfile("wave.vcd") ;
+    $dumpvars(0,tb) ;
+    
+    $display("time   |  reset   | count") ;
+    $monitor("%0t    |   %b     | %b",$time,reset,count) ;
+    
+    reset = 1;
+    #10 
+    
+    reset = 0;
+    #100
+    
+    $finish;
+  end
+endmodule
