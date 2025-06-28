@@ -1,0 +1,38 @@
+module tb ;
+  reg [3:0]a,b ;
+  reg clk ;
+  reg start ;
+  wire [7:0] p ;
+  wire done ;
+  
+  serial_multi_4bit UUT (
+    .a(a) ,
+    .b(b) ,
+    .clk(clk) ,
+    .start(start) ,
+    .p(p) ,
+    .done(done)
+  ); 
+  
+  always #5 clk = ~clk ;
+  
+  initial begin
+    $dumpfile("wave.vcd") ;
+    $dumpvars(0,tb) ;
+    
+    $monitor("%b  X   %b   =  %b ",a,b,p);
+    clk = 0 ;
+    start=1;
+    a=4'd3;
+    b=4'd5;
+    #10
+    
+    start = 0;
+    #50
+    
+    $finish ;
+  end
+    endmodule
+    
+    
+  
