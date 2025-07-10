@@ -1,0 +1,37 @@
+module tb;
+
+  reg clk, reset;
+  wire green_1, yellow_1, red_1;
+  wire green_2, yellow_2, red_2;
+
+  two_road_traffic DUT (
+    .clk(clk),
+    .reset(reset),
+    .green_1(green_1),
+    .yellow_1(yellow_1),
+    .red_1(red_1),
+    .green_2(green_2),
+    .yellow_2(yellow_2),
+    .red_2(red_2)
+  );
+
+    always #5 clk = ~clk;  
+  	initial begin
+    $dumpfile("wave.vcd");      
+    $dumpvars(0, tb);          
+
+    $display("green_1 | yellow_1 | red_1 | green_2 | yellow_2 | red_2");
+    $monitor("%b       | %b         | %b     | %b       | %b         | %b",
+             green_1, yellow_1, red_1, green_2, yellow_2, red_2);
+
+    clk = 0;
+    reset = 1;
+    #5;
+    reset = 0;
+
+    #110;
+
+    $finish;
+  end
+
+endmodule
