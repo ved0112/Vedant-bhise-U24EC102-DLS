@@ -1,0 +1,76 @@
+module two_road_traffic(
+  input clk,
+  input reset,
+  output reg green_1, yellow_1, red_1,
+  output reg green_2, yellow_2, red_2
+);
+
+  parameter s0_green_1  = 2'b00;
+  parameter s1_yellow_1 = 2'b01;
+  parameter s2_green_2  = 2'b10;
+  parameter s3_yellow_2 = 2'b11;
+
+  reg [1:0] current, next;
+  reg [3:0] counter;
+
+  parameter tgreen_1  = 4'd3;
+  parameter tyellow_1 = 4'd2;
+  parameter tgreen_2  = 4'd3;
+  parameter tyellow_2 = 4'd2;
+
+  always @(posedge clk or posedge reset) begin
+    if (reset) begin
+      current <= s0_green_1;
+      counter <= 0;
+    end else begin
+      if (counter == 0) begin
+        current <= next;
+        case (next)
+          s0_green_1:  counter <= tgreen_1;
+          s1_yellow_1: counter <= tyellow_1;
+          s2_green_2:  counter <= tgreen_2;
+          s3_yellow_2: counter <= tyellow_2;
+          default:     counter <= tgreen_1;
+        endcase
+      end else begin
+        counter <= counter - 1;
+      end
+    end
+  end
+
+  always @(*) begin
+    green_1 = 0; yellow_1 = 0; red_1 = 0;
+    green_2 = 0; yellow_2 = 0; red_2 = 0;
+
+    case (current)
+      s0_green_1: begin
+        green_1 = 1;
+        red_2 = 1;
+        next = s1_yellow_1;
+      end
+
+      s1_yellow_1: begin
+        yellow_1 = 1;
+        red_2 = 1;
+        next = s2_green_2;
+      end
+
+      s2_green_2: begin
+        green_2 = 1;
+        red_1 = 1;
+        next = s3_yellow_2;
+      end
+
+      s3_yellow_2: begin
+        yellow_2 = 1;
+        red_1 = 1;
+        next = s0_green_1;
+      end
+
+      default: begin
+        next = s0_green_1;
+      end
+    endcase
+  end
+
+endmodule
