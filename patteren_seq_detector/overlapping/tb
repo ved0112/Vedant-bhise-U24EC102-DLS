@@ -1,0 +1,44 @@
+// Code your testbench here
+// or browse Examples
+module tb ;
+  reg clk,reset,in_bit ;
+  wire pat_detected ;
+  
+  pattern_overlap_110 UUT (
+    .clk(clk)  ,
+    .reset(reset) ,
+    .in_bit(in_bit) ,
+    .pat_detected(pat_detected) 
+  );
+  
+  always #5 clk = ~clk ;
+  reg [31:0] str =32'b01101100101011100011010110011100 ;
+  
+  integer i ;
+  
+  initial begin
+    clk= 0 ;
+    reset = 1 ;
+    in_bit = 0 ;
+    #10 ;
+    
+    reset = 0 ;
+    
+    $display("Time  | in_bit  | pat_detected") ;
+    $monitor("%0t  |  %b     | %b   ", $time , in_bit , pat_detected);
+    
+    for (i = 31 ; i >= 0 ; i = i - 1 ) begin
+      in_bit = str[i] ;
+      #10 ;
+    end
+    
+    $finish ;
+    
+  end
+  
+endmodule
+    
+    
+    
+  
+  
