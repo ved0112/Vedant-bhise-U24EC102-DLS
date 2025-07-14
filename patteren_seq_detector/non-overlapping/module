@@ -1,0 +1,36 @@
+module pattern_non_overlap_101 (
+    input clk,
+    input reset,
+    input in_bit,
+    output reg pat_detected
+);
+
+    parameter S0 = 2'b00, S1 = 2'b01, S2 = 2'b10;
+    reg [1:0] current, next;
+
+    always @(posedge clk or posedge reset) begin
+        if (reset)
+            current <= S0;
+        else
+            current <= next;
+    end
+
+    always @(posedge clk or posedge reset) begin
+        if (reset)
+            pat_detected <= 0;
+        else if (current == S2 && in_bit == 1)
+            pat_detected <= 1;
+        else
+            pat_detected <= 0;
+    end
+
+    always @(*) begin
+        case (current)
+            S0: next = (in_bit) ? S1 : S0;
+            S1: next = (in_bit) ? S1 : S2;
+            S2: next= S0; 
+            default: next= S0;
+        endcase
+    end
+
+endmodule
