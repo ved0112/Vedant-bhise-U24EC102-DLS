@@ -1,0 +1,48 @@
+// Code your design here
+module pattern_overlap_110(
+  
+  input clk ,reset,in_bit,
+  output reg pat_detected
+);
+  
+  parameter s0 = 2'b00,s1=2'b01 ,s2=2'b10 ;
+  
+  reg [1:0] current , next ;
+  
+  always @(posedge clk or posedge reset) begin
+    if (reset) begin 
+      current <= s0 ;
+    end
+      
+      else begin 
+      	current <= next ;
+      end
+      end
+    
+    always @(*) begin
+      pat_detected = 0 ;
+      
+      case (current)
+        s0 : next = (in_bit) ? s1 : s0 ;
+        
+        s1 : next = (in_bit) ? s2 : s0 ;
+        
+        s2 :if (!in_bit) begin
+          next = s0 ;
+          pat_detected = 1 ;
+        end else begin
+          next = s2 ;
+        end
+        
+        default : next = s0 ;
+      endcase
+      
+    end
+    endmodule
+    
+      
+      
+          
+      
+      
+      
