@@ -25,11 +25,12 @@ module tb ;
     reset = 0 ;
     
     $display("Time  | in_bit  | pat_detected") ;
-    $monitor("%0t  |  %b     | %b   ", $time , in_bit , pat_detected);
     
     for (i = 31 ; i >= 0 ; i = i - 1 ) begin
       in_bit = str[i] ;
       #10 ;
+      $display("%0t  |  %b     | %b   ", $time , in_bit , pat_detected);
+
     end
     
     $finish ;
