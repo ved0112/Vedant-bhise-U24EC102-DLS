@@ -1,3 +1,4 @@
+
 // Code your design here
 module pattern_overlap_110(
   
@@ -10,6 +11,16 @@ module pattern_overlap_110(
   reg [1:0] current , next ;
   
   always @(posedge clk or posedge reset) begin
+    if (reset) begin
+      pat_detected <= 0 ;
+    end else if (current == s2 && in_bit == 0) begin
+      pat_detected <= 1 ;
+    end else begin
+      pat_detected <= 0 ;
+    end
+  end
+  
+  always @(posedge clk or posedge reset) begin
     if (reset) begin 
       current <= s0 ;
     end
@@ -20,7 +31,6 @@ module pattern_overlap_110(
       end
     
     always @(*) begin
-      pat_detected = 0 ;
       
       case (current)
         s0 : next = (in_bit) ? s1 : s0 ;
@@ -29,7 +39,6 @@ module pattern_overlap_110(
         
         s2 :if (!in_bit) begin
           next = s0 ;
-          pat_detected = 1 ;
         end else begin
           next = s2 ;
         end
