@@ -1,0 +1,51 @@
+`timescale 1ps/1ps
+
+module tb;
+
+    reg clk;
+    reg write_en;
+    reg [13:0] addr;
+    reg [31:0] din; 
+    wire [31:0] dout;
+
+LUT_64KB_32W UUT (
+    .clk(clk),
+    .write_en(write_en),
+    .addr(addr),
+    .din(din),
+    .dout(dout)
+);
+
+    initial clk = 0 ;
+    always #5 clk = ~clk ;
+
+    initial begin
+        write_en = 0;
+        din = 0;
+        addr = 0 ;
+        
+        @(posedge clk);
+
+        write_en = 1;
+        addr = 14'h0 ; din = 32'haabc_1234 ;@(posedge clk); 
+        addr = 14'h1 ; din = 32'h543b_abc3 ;@(posedge clk); 
+        addr = 14'h2 ; din = 32'hbc34_1234 ;@(posedge clk) ;
+
+        write_en = 0 ;
+        din = 0;
+        addr = 0;
+
+        addr = 14'h0000 ; @(posedge clk);
+        $display("addr =0x%h , dout= 0x%h",addr , dout);
+
+
+        addr = 14'h0001 ;@(posedge clk);
+        $display("addr =0x%h , dout= 0x%h",addr , dout);
+
+        addr = 14'h0002 ;@(posedge clk);
+        $display("addr =0x%h , dout= 0x%h",addr , dout);
+
+        $finish;
+
+        end
+endmodule
