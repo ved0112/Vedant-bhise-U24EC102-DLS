@@ -1,0 +1,27 @@
+module axi_master (
+    input clk ,
+    input reset ,
+    input [31:0]data_in ,
+    input data_valid,
+    output reg [31:0]tdata,
+    output reg tvalid,
+    input tready
+);
+
+always @(posedge clk or posedge reset ) begin
+    if (reset) begin
+        tdata <= 0 ;
+        tvalid <= 0 ;
+    end else begin
+        if (data_valid && !tvalid) begin
+            tdata <= data_in ;
+            tvalid <= 1'b1 ;
+        end
+
+        if (tvalid && tready) begin
+            tvalid <= 0 ;
+        end
+    end
+end
+    
+endmodule
