@@ -1,0 +1,31 @@
+module axi_stream (
+    input clk ,
+    input reset ,
+    input [31:0] data_in ,
+    input data_valid
+);
+
+wire [31:0] tdata ;
+wire tready ;
+wire tvalid ;
+
+axi_master master_int (
+    .clk(clk),
+    .reset(reset),
+    .data_in(data_in),
+    .data_valid(data_valid),
+    .tdata(tdata),
+    .tvalid(tvalid),
+    .tready(tready)
+);
+
+axi_slave slave_inst (
+    .clk(clk),
+    .reset(reset),
+    .tdata(tdata),
+    .tvalid(tvalid),
+    .tready(tready)
+);
+
+    
+endmodule
