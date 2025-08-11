@@ -1,0 +1,31 @@
+module axi_slave(
+    input clk ,
+    input reset ,
+    input [31:0] tdata ,
+    input tvalid ,
+    output reg tready 
+);
+
+reg [31:0] mem [0:15] ;
+integer write_ptr ;
+
+always @(posedge clk or posedge reset) begin
+    if (reset) begin
+        tready <= 1'b1 ;
+        write_ptr <= 0 ;
+    end else begin
+        if (tvalid && tready) begin
+            mem[write_ptr] <= tdata ;
+            write_ptr <= write_ptr + 1 ;
+
+            if (write_ptr == 15) begin
+                tready <= 0 ;
+            end
+        end
+
+    end
+
+end
+
+
+endmodule
